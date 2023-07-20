@@ -1,83 +1,81 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function App() {
-    // 1번째 인자 -> 변수 / 2번째 인자 -> 변수의 값을 변화시킬 함수
-    // 2번째 인자의 가장 앞에는 무조건 set 키워드를 붙여서 사용
-    const [count, setCount] = useState(0);
-    const [count2, setCount2] = useState(1);
+  const [userName, setUserName] = useState("");
+  const [userAge, setUserAge] = useState("");
+  const [userAddr, setUserAddr] = useState("");
+  const [userArray, setUserArray] = useState([]);
 
-    
-    // 1. 항상 렌더링이 된다
-    // 항상 렌더링 되는 경우는 거의 없음!
-    useEffect(() => {
-      console.log("항상 렌더링 👌")
-    })
-
-    // 2. 처음에만 렌더링이 된다
-    useEffect(() => {
-      console.log("처음에만 렌더링 👍")
-    }, [])
-
-    // 3. count 변수의 상태가 변할 때 렌더링이 된다
-    useEffect(() => {
-      console.log("count 변수 렌더링 🔍")
-    }, [count])
-
-    // 3. count2 변수의 상태가 변할 때 렌더링이 된다
-    useEffect(() => {
-      console.log("count2 변수 렌더링 👀")
-    }, [count2])
-
-
-
-    function increase(){
-      //setCount(count+1);
-      //setCount((이전값) => console.log(이전값));
-      setCount((이전값) => 이전값+1);
-    }
-
-    function decrease(){
-      //setCount(count-1);
-      setCount((preval) => preval-1);
+  function handleName(event){
+    //console.log(event.target.value);
+    setUserName(event.target.value);
   }
 
-    function mutiple(){
-      setCount2((preval) => preval*2);
-  } 
+  function handleAge(event){
+    //console.log(event.target.value);
+    setUserAge(event.target.value);
+  }
 
-    function zeroset(){
-      setCount(0);
+  function handleAddr(event){
+    //console.log(event.target.value);
+    setUserAddr(event.target.value);
+  }
+   
+  function onSubmit(event){
+    event.preventDefault()
+    const tempObject = {
+      name : userName,
+      age : userAge,
+      addr : userAddr
     }
+    //console.log(tempObject);
 
+    //setUserArray(userArray.concat(tempObject));
+    setUserArray((preVal => [...preVal, tempObject]));  // ...preVal : 배열을 풀어헤친다. 안의 객체만 나옴
+    // 새로운 객체를 집어넣고 []로 싸서 새로운 배열로 만듬 -> 기존 값 불변성
+    console.log(userArray);
+  }
 
   return (
-    <div className="container text-center mt-3">
-        <h1>React Hooks</h1>
-        <hr/>
-        <h4>현재 값은 : {count}</h4>
+    <div className="container mt-3 text-center">
+      <h1>회원 정보 관리 앱 😆</h1>
+      <hr/>
 
-        <button className="btn btn-primary me-2 mb-3"
-          onClick={increase}>
-            증가
-        </button>
+      <form>
+        <input onChange={handleName} className="form-control mb-2" type="text" placeholder="이름 입력"/>
+        <input onChange={handleAge} className="form-control mb-2" type="text" placeholder="나이 입력"/>
+        <input onChange={handleAddr} className="form-control mb-2" type="text" placeholder="주소 입력"/>
 
-        <button className="btn btn-primary me-2 mb-3"
-          onClick={decrease}>
-            감소
-        </button>
+        <button onClick={onSubmit} className="btn btn-primary">등록하기</button>
+      </form>
+      <br/>
+      <hr/>
 
-        <button className="btn btn-primary mb-3"
-          onClick={zeroset}>
-            초기화
-        </button>
+      <h1>가입된 회원 목록 👫</h1>
+      
+      {userArray.length > 0? <table className="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th>이름</th>
+            <th>나이</th>
+            <th>주소</th>
+          </tr>
+        </thead>
 
+        <tbody>
+          {userArray.map((item, index) => {
+            return (
+              <tr key={index}>
+                <td>{item.name}</td>
+                <td>{item.age}</td>
+                <td>{item.addr}</td>
+              </tr>
+            )
 
-        <h4>현재 값은 : {count2}</h4>
-        <button className="btn btn-primary"
-          onClick={mutiple}>
-            X 2
-        </button>
+          })}
+        </tbody>
+      </table> : <p className="text-danger fw-bold">데이터가 없습니다. 입력해주세요.</p>}
 
     </div>
   );
