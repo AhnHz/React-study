@@ -7,6 +7,7 @@ function App() {
     const [count, setCount] = useState(0);
     const [count2, setCount2] = useState(1);
 
+    
     // 1. 항상 렌더링이 된다
     // 항상 렌더링 되는 경우는 거의 없음!
     useEffect(() => {
