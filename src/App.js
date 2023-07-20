@@ -1,11 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function App() {
   const [userName, setUserName] = useState("");
   const [userAge, setUserAge] = useState("");
   const [userAddr, setUserAddr] = useState("");
   const [userArray, setUserArray] = useState([]);
+  const ref = useRef();
 
   function handleName(event){
     //console.log(event.target.value);
@@ -34,7 +35,12 @@ function App() {
     //setUserArray(userArray.concat(tempObject));
     setUserArray((preVal => [...preVal, tempObject]));  // ...preVal : 배열을 풀어헤친다. 안의 객체만 나옴
     // 새로운 객체를 집어넣고 []로 싸서 새로운 배열로 만듬 -> 기존 값 불변성
-    console.log(userArray);
+    //console.log(userArray);
+
+    setUserName("");
+    setUserAge("");
+    setUserAddr("");
+    ref.current.focus();
   }
 
   return (
@@ -43,9 +49,9 @@ function App() {
       <hr/>
 
       <form>
-        <input onChange={handleName} className="form-control mb-2" type="text" placeholder="이름 입력"/>
-        <input onChange={handleAge} className="form-control mb-2" type="text" placeholder="나이 입력"/>
-        <input onChange={handleAddr} className="form-control mb-2" type="text" placeholder="주소 입력"/>
+        <input ref={ref} onChange={handleName} value={userName} className="form-control mb-2" type="text" placeholder="이름 입력"/>
+        <input onChange={handleAge} value={userAge} className="form-control mb-2" type="text" placeholder="나이 입력"/>
+        <input onChange={handleAddr} value={userAddr} className="form-control mb-2" type="text" placeholder="주소 입력"/>
 
         <button onClick={onSubmit} className="btn btn-primary">등록하기</button>
       </form>
